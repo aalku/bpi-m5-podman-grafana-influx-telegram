@@ -1,0 +1,56 @@
+version: '3.8'
+
+services:
+
+  telegraf:
+    container_name: telegraf
+    build:
+      context: ./telegrafImage
+      dockerfile: Dockerfile
+    volumes:
+      - "./telegraf.conf:/etc/telegraf/telegraf.conf:ro"
+      - "./query_temp.py:/var/query_temp.py"
+      - "/:/hostfs:ro"
+      - "/var/log/fan-controller.log:/var/log/fan-controller.log:ro"
+      - "/var/run/podman/podman.sock:/var/run/podman/podman.sock"
+    cap_add:
+      - "cap_net_raw"
+    environment:
+      - INFLUX_URL=${INFLUX_URL}
+      - INFLUX_TOKEN=${INFLUX_TOKEN}
+      - HOSTNAME=${HOSTNAME}
+      - HOST_ETC=/hostfs/etc
+      - HOST_PROC=/hostfs/proc
+      - HOST_SYS=/hostfs/sys
+      - HOST_VAR=/hostfs/var
+      - HOST_RUN=/hostfs/run
+      - HOST_MOUNT_PREFIX=/hostfs
+      - TELEGRAF_CONFIG_TEMP_PYTHON_SCRIPT=python3 /var/query_temp.py
+    restart: unless-stopped
+    user: "root"
+    depends_on:
+      - influxdb
+  
+  grafana:
+    image: docker.io/grafana/grafana:9.5.6
+    container_name: grafana
+    volumes:
+      - "${GRAFANA_DATAPATH}:/var/lib/grafana"
+    ports:
+      - "3000:3000"
+    restart: unless-stopped
+    user: "999:999"
+    depends_on:
+      - influxdb
+
+  influxdb:
+    image: docker.io/influxdb:2.7.0
+    container_name: influxdb
+    volumes:
+      - ${INFLUXDB_DATAPATH}:/var/lib/influxdb2
+    user: "999:999"
+    ports:
+      - "8086:8086"
+    restart: unless-stopped
+    environment:
+      - "INFLUXDB_REPORTING_DISABLED=true"

@@ -1,0 +1,13 @@
+# Configure this and rename the file to ".env"
+
+INFLUX_URL="http://host.containers.internal:8086"
+
+HOSTNAME="bananapim5"
+
+# Data paths
+GRAFANA_DATAPATH="/var/lib/grafana"
+INFLUXDB_DATAPATH="/var/lib/influxdb2"
+
+# SECRET
+INFLUX_TOKEN=""
+
