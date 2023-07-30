@@ -12,6 +12,7 @@ services:
       - "./query_temp.py:/var/query_temp.py"
       - "/:/hostfs:ro"
       - "/var/log/fan-controller.log:/var/log/fan-controller.log:ro"
+      - "/var/run/fan-status.json:/var/run/fan-status.json:ro"
       - "/var/run/podman/podman.sock:/var/run/podman/podman.sock"
     cap_add:
       - "cap_net_raw"

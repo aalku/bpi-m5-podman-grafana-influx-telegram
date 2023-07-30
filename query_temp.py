@@ -14,6 +14,13 @@ try:
   finally:
       f.close()
 
+
+  f = open("/var/run/fan-status.json", "r")
+  try:
+    lines2 = f.readlines()
+  finally:
+    f.close()
+
   data = []
 
   start = datetime.datetime.now() - datetime.timedelta(hours=hours)
@@ -23,7 +30,7 @@ try:
         return obj.isoformat()
     raise TypeError ("Type %s not serializable" % type(obj))
 
-  for l in lines:
+  for l in (lines + lines2):
     d = json.loads(l)
     try:
         dt = datetime.datetime.fromisoformat(d["updated-ts"])
