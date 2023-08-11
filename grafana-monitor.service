@@ -1,0 +1,18 @@
+[Unit]
+Description=Grafana+Telegraf monitoring podman service
+Requires=podman.service
+After=podman.service
+
+[Service]
+Type=oneshot
+WorkingDirectory=/home/pi/grafana_monitor
+Environment=COMPOSE_HTTP_TIMEOUT=600
+
+ExecStartPre=bash -c "/usr/bin/podman-compose down && echo -e '' >> /var/run/fan-status.json && echo -e '' >> /var/log/fan-controller.log"
+ExecStart=/usr/bin/env /usr/bin/podman-compose up -d
+ExecStop=/usr/bin/env /usr/bin/podman-compose stop
+StandardOutput=syslog
+RemainAfterExit=yes
+
+[Install]
+WantedBy=multi-user.target

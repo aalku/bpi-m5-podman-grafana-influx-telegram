@@ -31,8 +31,8 @@ try:
     raise TypeError ("Type %s not serializable" % type(obj))
 
   for l in (lines + lines2):
-    d = json.loads(l)
     try:
+        d = json.loads(l)
         dt = datetime.datetime.fromisoformat(d["updated-ts"])
         if dt >= start:
             temp = d["temp-c"]
