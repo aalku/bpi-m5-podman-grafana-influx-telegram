@@ -3,19 +3,20 @@
 import json
 import datetime
 import sys
+import os
 
 try:
 
   hours = 72
 
-  f = open("/var/log/fan-controller.log", "r")
+  f = open(os.getenv("FAN_LOG", "/var/log2/fan-controller/fan-controller.log"), "r")
   try:
       lines = f.readlines()
   finally:
       f.close()
 
 
-  f = open("/var/run/fan-status.json", "r")
+  f = open(os.getenv("FAN_STATUS", "/var/run/fan-controller/fan-status.json"), "r")
   try:
     lines2 = f.readlines()
   finally:
