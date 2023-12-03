@@ -52,6 +52,7 @@ services:
     user: "999:999"
     ports:
       - "8086:8086"
+      - "8073:8073"
     restart: unless-stopped
     environment:
       - "INFLUXDB_REPORTING_DISABLED=true"
