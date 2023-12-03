@@ -33,7 +33,7 @@ services:
       - influxdb
   
   grafana:
-    image: docker.io/grafana/grafana:9.5.6
+    image: docker.io/grafana/grafana:10.0.3
     container_name: grafana
     volumes:
       - "${GRAFANA_DATAPATH}:/var/lib/grafana"
